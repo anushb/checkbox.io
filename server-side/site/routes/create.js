@@ -19,8 +19,8 @@ MongoClient.connect("mongodb://"+user+":"+password+"@127.0.0.1:27017/site?authSo
 });
 
 var emailServer  = emailjs.server.connect({
-   user:    "supportemail@domain.com", 
-   password:"supportpwd", 
+   user:    "anushbonam1993@gmail.com", 
+   password:"devops123", 
    host:    "smtp.gmail.com", 
    ssl:     true
 });
@@ -45,7 +45,7 @@ exports.createStudy = function(req, res) {
 
         	collection.insert(study, {safe:true}, function(err, result) 
         	{
-        		console.log( err || "Study created: " + result[0]._id );
+        		console.log( err || "Study created: " + study._id );
 
         		if( err )
         		{
@@ -53,7 +53,7 @@ exports.createStudy = function(req, res) {
         		}
         		else
         		{
-                    study.setPublicLink( result[0]._id );
+                    study.setPublicLink( study._id );
 
                     // update with new public link, and notify via email, redirect user to admin page.
                     collection.update( {'_id' : study._id}, {'$set' : {'publicLink' : study.publicLink}},
