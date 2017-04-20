@@ -2,12 +2,13 @@ var mongo = require('mongodb');
 var crypto = require('crypto');
 var emailjs = require('emailjs/email');
 var models = require('./studyModel.js');
-
+var redis = require('redis');
  
 var Server = mongo.Server,
     Db = mongo.Db,
     BSON = mongo.BSONPure;
-
+var client = redis.createClient(6379,'192.241.159.212',{});
+var featureFlag=client.get("featureFlag",function(e){});
 var user = process.env.user;
 var password = process.env.password;
 var MongoClient = mongo.MongoClient;
@@ -29,13 +30,13 @@ exports.createStudy = function(req, res) {
 
     var invitecode = req.body.invitecode; 
     var studyKind = req.body.studyKind;
-
+if(featureFlag == "OFF"){
     if( invitecode != "RESEARCH" )
     {
         res.send({'error':'Invalid invitecode'});
         return;
     }
-
+}
     basicCreate( req, res, studyKind ).onCreate( function(study)
     {
     	db.collection('studies', function(err, collection) 
